@@ -74,7 +74,7 @@ describe.runIf(process.platform === "win32")("run-guard.ps1 launcher", () => {
       "ProgramFiles(x86)": empty,
       LOCALAPPDATA: empty,
     };
-    const r = launch({ tool_name: "Bash", tool_input: { command: "git status" } }, env as NodeJS.ProcessEnv);
+    const r = launch({ tool_name: "Bash", tool_input: { command: "git status" } }, env as unknown as NodeJS.ProcessEnv);
     expect(r.status).toBe(2);
     expect(r.stderr).toContain("fail closed");
   });
