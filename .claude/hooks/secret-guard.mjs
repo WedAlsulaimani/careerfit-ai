@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 // PreToolUse hook: blocks tool calls that could leak secrets into the repository.
 // Exit 0 = allow, exit 2 = block (stderr is shown to Claude). Reads the hook JSON from stdin.
+// Started through run-guard.ps1, which also blocks when Node.js cannot be found or run.
 import { basename } from "node:path";
 
 const SECRET_PATTERNS = [
@@ -36,13 +37,15 @@ let raw = "";
 process.stdin.setEncoding("utf8");
 process.stdin.on("data", (c) => (raw += c));
 process.stdin.on("end", () => {
-  let event;
+  let reason;
   try {
-    event = JSON.parse(raw.replace(/^﻿/, ""));
+    const event = JSON.parse(raw.replace(/^﻿/, ""));
+    reason = violation(event.tool_name, event.tool_input || {});
   } catch {
-    process.exit(0); // never break the session on malformed input
+    // Fail closed: input we cannot evaluate is never allowed through.
+    process.stderr.write("secret-guard: could not evaluate the tool call, blocking (fail closed).\n");
+    process.exit(2);
   }
-  const reason = violation(event.tool_name, event.tool_input || {});
   if (reason) {
     process.stderr.write(`secret-guard: ${reason}. Secrets belong in .env.local (git-ignored), never in tracked files.\n`);
     process.exit(2);

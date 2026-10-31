@@ -3,7 +3,12 @@
     "PreToolUse": [
       {
         "matcher": "Write|Edit|NotebookEdit|Bash|PowerShell",
-        "hooks": [{ "type": "command", "command": "node .claude/hooks/secret-guard.mjs" }]
+        "hooks": [
+          {
+            "type": "command",
+            "command": "powershell -NoProfile -ExecutionPolicy Bypass -File .claude/hooks/run-guard.ps1"
+          }
+        ]
       }
     ]
   }
