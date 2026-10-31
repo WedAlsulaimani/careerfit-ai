@@ -114,4 +114,18 @@ describe("Open-redirect protection", () => {
     expect(safeNextPath("https://evil.com", "/x")).toBe("/x");
     expect(safeNextPath(null, "/x")).toBe("/x");
   });
+
+  it("rejects paths URL parsers collapse into protocol-relative URLs", () => {
+    // WHATWG URL parsing strips tab/CR/LF, so "/\t/evil.com" becomes "//evil.com".
+    for (const hostile of ["/\t/evil.com", "/\n/evil.com", "/\r/evil.com", "/ok\u0000", "/%0d"]) {
+      const result = safeNextPath(hostile, "/x");
+      expect(new URL(result, "http://localhost:3000").host).toBe("localhost:3000");
+    }
+    expect(safeNextPath("/\t/evil.com", "/x")).toBe("/x");
+    expect(safeNextPath("/\u0000", "/x")).toBe("/x");
+  });
+
+  it("still accepts ordinary paths with query strings", () => {
+    expect(safeNextPath("/resumes/abc/edit?tab=preview#top", "/x")).toBe("/resumes/abc/edit?tab=preview#top");
+  });
 });
