@@ -2,13 +2,23 @@
 
 _Last updated: 2026-10-31_
 
+## Update 2026-11-08 — Phase 0 (stabilize baseline)
+- Removed the duplicated second copy of the initial schema (`supabase/migrations/20261030000000_initial_schema.sql` now ends at line 576). The earlier file could not be applied because `public.profiles` was created twice.
+- Added `tests/unit/migration-integrity.test.ts`: fails if any table, index, trigger, function, extension or policy is defined twice in a migration.
+- `.gitignore` now ignores `.vs/`.
+- Docs corrected: Gemini is the default provider (`ARCHITECTURE.md`, `SECURITY.md`); the UI kit is hand-written, not shadcn/Radix.
+- Added `.github/workflows/ci.yml` (typecheck, lint, test, build). Not yet pushed or enabled on GitHub.
+- Baseline `npm run verify` (Windows 11, this session): typecheck clean; lint clean; `vitest run` 107 passed, 9 skipped; `next build` succeeded (31 static pages, 60+ routes).
+- Known warning: Next reports that it ignored a `package-lock.json` in the parent folder because it is outside the git repository. Setting `turbopack.root` in `next.config.ts` would silence it. Not changed in Phase 0.
+- Still not verified live: Supabase RLS suite, Gemini and Anthropic calls, Vercel deployment.
+
 ## Update 2026-10-31 — Gemini provider
 - Added `server/ai/gemini.ts` (official `@google/genai`; `responseJsonSchema` from the same Zod schemas, Zod re-validation, one repair retry, controlled transient retries, safety/blocked/truncated mapping to typed errors). Gemini is the default (`AI_PROVIDER=gemini`, model `gemini-2.5-flash`); Anthropic remains selectable. Keys are server-only; analysis, matching, validators and resume generation are unchanged. Free-tier Gemini quotas are rate-limited and may use submitted data for product improvement per Google's terms — check them before using real personal data.
 - Tests: `tests/unit/gemini-provider.test.ts` (mocked SDK; no live Gemini call has been made).
 
 ## Completed
 
-- **Foundation:** Next.js 16.4 App Router + TypeScript strict + Tailwind 4, shadcn-pattern UI kit, ESLint, Vitest, Playwright, env template, security headers.
+- **Foundation:** Next.js 16.4 App Router + TypeScript strict + Tailwind 4, hand-written UI kit following shadcn patterns (no shadcn/Radix dependency), ESLint, Vitest, Playwright, env template, security headers.
 - **Database:** single migration with all tables, composite ownership FKs, CHECK constraints, indexes, `updated_at` triggers, RLS on every user table, append-only AI ledger, new-user trigger, private `documents` bucket + owner-only storage policies.
 - **Auth:** sign-up (with confirmation), sign-in, sign-out, forgot/reset password, `/auth/callback` + `/auth/confirm`, session refresh proxy, server-side `requireUser()` on all app pages, `authedRoute()` on all APIs; new users → onboarding, returning users → dashboard.
 - **Master Career Profile:** all 13 sections via a declarative registry; onboarding wizard (progress persisted, skip/back/next, save-and-finish-later, review step); full profile editor; autosave (personal/goals); local drafts (entries); add/edit/duplicate/delete; conditional fields; private attachments with magic-byte validation and signed URLs; profile overview + completion indicator.

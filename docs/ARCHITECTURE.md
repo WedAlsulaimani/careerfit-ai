@@ -20,7 +20,7 @@ Next.js App Router (Node.js runtime)
   │        claim validator, matching validator + score, resume composer, ATS template, i18n
   ▼
 Supabase: Postgres (RLS on every user table) · Auth · private Storage bucket
-Anthropic Claude API (server-side only)
+AI provider API, server-side only: Google Gemini (default) or Anthropic Claude (`AI_PROVIDER=anthropic`)
 ```
 
 ### Layers
@@ -59,7 +59,7 @@ All calls go through `runStructured()` (`server/ai/index.ts`), which:
 
 1. requires recorded AI consent (`profiles.ai_consent_at`),
 2. enforces the per-user daily limit from `ai_usage`,
-3. calls the provider (`AIProvider` interface — `AnthropicProvider` today) with a Zod schema via structured outputs,
+3. calls the provider (`AIProvider` interface — `GeminiProvider` by default, `AnthropicProvider` when `AI_PROVIDER=anthropic`) with a Zod schema (Gemini `responseJsonSchema` plus Zod re-validation; Anthropic structured outputs),
 4. records usage (success or failure),
 5. maps failures to typed errors (`ai_unavailable`, `ai_refused`, …) — **never** to fabricated output.
 
@@ -85,7 +85,7 @@ Third-party text is wrapped in `<job_posting>` tags (closing tags inside the con
 
 ### Model configuration
 
-`AI_MODEL` (default `claude-opus-5-5`), `AI_EFFORT` (default `medium`), timeout and retries come from the environment. Requests use the official SDK's `beta.messages.parse` with `betaZodOutputFormat` and the server-side refusal fallback (`server-side-fallback-2026-07-01`, `fallbacks: "default"`; disable with `AI_REFUSAL_FALLBACK=off`).
+`AI_PROVIDER` (default `gemini`), `AI_MODEL` (default `gemini-2.5-flash`; `claude-opus-5-5` when Anthropic is selected), timeout and retries come from the environment. `AI_EFFORT` applies to Anthropic only. Gemini requests use `@google/genai` with `responseJsonSchema`. Anthropic requests use the official SDK's `beta.messages.parse` with `betaZodOutputFormat` and the server-side refusal fallback (`server-side-fallback-2026-07-01`, `fallbacks: "default"`; disable with `AI_REFUSAL_FALLBACK=off`).
 
 ## PDF generation
 

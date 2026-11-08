@@ -1,0 +1,38 @@
+name: CI
+
+# Phase 0 baseline: typecheck, lint, unit and integration tests (live-service
+# tests skip without credentials) and a production build. Live Supabase RLS
+# and E2E journeys run separately once credentials are configured as secrets.
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          cache: npm
+
+      - run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Unit and integration tests
+        run: npm test
+
+      - name: Build
+        run: npm run build

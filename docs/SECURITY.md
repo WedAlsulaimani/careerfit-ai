@@ -61,4 +61,4 @@ The PDF renderer blocks all network requests, so resume content cannot make the 
 ## Secrets
 
 - `.env*` files are git-ignored (except `.env.example`, which contains placeholders only).
-- On Vercel, store `SUPABASE_SERVICE_ROLE_KEY` and `ANTHROPIC_API_KEY` as sensitive environment variables.
+- On Vercel, store `SUPABASE_SERVICE_ROLE_KEY` and `GEMINI_API_KEY` (or `ANTHROPIC_API_KEY` when using Anthropic) as sensitive environment variables.
