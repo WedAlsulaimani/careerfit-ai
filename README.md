@@ -38,7 +38,7 @@ Sample output (fictional fixture data): [`docs/samples/sample-en.pdf`](docs/samp
 
 ## Tech stack
 
-Next.js 16 (App Router, Turbopack) · React 19 · TypeScript (strict) · Tailwind CSS 4 · shadcn/ui-pattern components (CVA + tailwind-merge) · Lucide · React Hook Form + Zod 4 · Supabase (Postgres, Auth, Storage, RLS) · Google Gemini via `@google/genai` (default; JSON-schema structured output) with Anthropic Claude via `@anthropic-ai/sdk` as an optional provider · Tesseract.js (OCR) · ZXing (QR) · Cheerio · undici + ipaddr.js (SSRF guard) · puppeteer-core + @sparticuz/chromium (PDF) · pdf-lib (metadata) · unpdf (PDF text verification) · Vitest · Playwright.
+Next.js 16 (App Router, Turbopack) · React 19 · TypeScript (strict) · Tailwind CSS 4 · hand-written UI components (CVA + tailwind-merge, no shadcn/Radix dependency) · Lucide · React Hook Form + Zod 4 · Supabase (Postgres, Auth, Storage, RLS) · Google Gemini via `@google/genai` (default; JSON-schema structured output) with Anthropic Claude via `@anthropic-ai/sdk` as an optional provider · Tesseract.js (OCR) · ZXing (QR) · Cheerio · undici + ipaddr.js (SSRF guard) · puppeteer-core + @sparticuz/chromium (PDF) · pdf-lib (metadata) · unpdf (PDF text verification) · Vitest · Playwright.
 
 See [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md), [`docs/API.md`](docs/API.md) and [`docs/SECURITY.md`](docs/SECURITY.md).
 

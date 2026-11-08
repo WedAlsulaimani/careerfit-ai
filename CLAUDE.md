@@ -39,5 +39,5 @@ docs live in `node_modules/next/dist/docs/`.
 ## Definition of Done
 1. A test directly covers the change (written failing first for bug fixes).
 2. `npm run verify` passes with 0 type errors, 0 lint problems, 0 failing tests, successful build.
-3. No secrets or unrelated changes in the diff (`git diff --stat` reviewed); docs/PROGRESS.md updated if behavior changed.
+3. No secrets or unrelated changes in the diff (`git diff --stat` reviewed).
 4. Commits are descriptive; the PR states the problem, the change and the test evidence.
