@@ -19,9 +19,22 @@ describe("secret-guard PreToolUse hook", () => {
     expect(run("Edit", { file_path: "C:\\p\\.env.production", new_string: "A=1" }).code).toBe(2);
   });
 
-  it("allows .env.example and ordinary source files", () => {
+  it("blocks .env files with Windows paths, POSIX paths, and mixed separators", () => {
+    expect(run("Write", { file_path: "C:\\Users\\dev\\project\\.env.local", content: "A=1" }).code).toBe(2);
+    expect(run("Write", { file_path: "/home/dev/project/.env.local", content: "A=1" }).code).toBe(2);
+    expect(run("Edit", { file_path: "C:\\repo/.env.production", new_string: "A=1" }).code).toBe(2);
+    expect(run("Write", { file_path: ".env", content: "A=1" }).code).toBe(2);
+    expect(run("Write", { file_path: "C:\\p\\.env", content: "A=1" }).code).toBe(2);
+  });
+
+  it("allows .env.example with any path style", () => {
     expect(run("Write", { file_path: "/p/.env.example", content: "GEMINI_API_KEY=" }).code).toBe(0);
+    expect(run("Write", { file_path: "C:\\p\\.env.example", content: "GEMINI_API_KEY=" }).code).toBe(0);
+  });
+
+  it("allows ordinary source files", () => {
     expect(run("Write", { file_path: "/p/src/a.ts", content: "export const a = 1;" }).code).toBe(0);
+    expect(run("Write", { file_path: "C:\\p\\src\\a.ts", content: "export const a = 1;" }).code).toBe(0);
   });
 
   it("blocks key-shaped content outside .env.example", () => {

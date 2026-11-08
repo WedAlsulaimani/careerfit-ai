@@ -10,14 +10,15 @@ const SECRET_PATTERNS = [
   [/eyJ[A-Za-z0-9_-]{15,}\.eyJ[A-Za-z0-9_-]{15,}\.[A-Za-z0-9_-]{10,}/, "JWT (e.g. Supabase service-role key)"],
 ];
 
-const isSecretEnvFile = (p) => /^\.env(\..+)?$/.test(basename(p || "")) && basename(p) !== ".env.example";
+const portableBasename = (p) => basename((p || "").replace(/\\/g, "/"));
+const isSecretEnvFile = (p) => /^\.env(\..+)?$/.test(portableBasename(p)) && portableBasename(p) !== ".env.example";
 
 function violation(tool, input) {
   const path = input.file_path || input.notebook_path;
-  if (path && isSecretEnvFile(path)) return `writing to ${basename(path)} is blocked; edit .env.local yourself`;
+  if (path && isSecretEnvFile(path)) return `writing to ${portableBasename(path)} is blocked; edit .env.local yourself`;
 
   const text = [input.content, input.new_string, input.command].filter((v) => typeof v === "string").join("\n");
-  const isExampleFile = path && basename(path) === ".env.example";
+  const isExampleFile = path && portableBasename(path) === ".env.example";
   if (!isExampleFile) {
     for (const [re, label] of SECRET_PATTERNS) if (re.test(text)) return `content looks like a ${label}`;
   }
