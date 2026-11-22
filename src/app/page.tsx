@@ -4,8 +4,8 @@ import {
   BadgeCheck,
   FileSearch,
   FileText,
+  ImageUp,
   Languages,
-  Link2,
   ListChecks,
   Lock,
   PenLine,
@@ -20,8 +20,8 @@ import { LanguageSwitcher } from "@/components/language-switcher";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-const stepIcons = [UserRound, Link2, ListChecks, FileText];
-const featureIcons = [ScanLine, FileSearch, BadgeCheck, PenLine, Languages, ListChecks];
+const stepIcons = [UserRound, ImageUp, ListChecks, PenLine];
+const featureIcons = [ScanLine, FileSearch, BadgeCheck, PenLine, Languages, FileText];
 
 export default async function LandingPage() {
   const { t } = await getI18n();
@@ -196,20 +196,13 @@ export default async function LandingPage() {
         </section>
 
         {/* Privacy */}
-        <section id="privacy" className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
-          <div className="grid gap-8 lg:grid-cols-[0.8fr_1.2fr]">
-            <div className="space-y-3">
-              <Lock className="size-6 text-accent" aria-hidden />
-              <h2 className="text-2xl font-semibold tracking-tight">{L.privacyTitle}</h2>
+        <section id="privacy" className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
+          <div className="flex items-start gap-3 rounded-xl border border-border bg-surface p-5">
+            <Lock className="mt-0.5 size-5 shrink-0 text-accent" aria-hidden />
+            <div>
+              <h2 className="font-semibold">{L.privacyTitle}</h2>
+              <p className="mt-1 text-sm text-muted-foreground">{L.privacyPoints[0]}</p>
             </div>
-            <ul className="space-y-3">
-              {L.privacyPoints.map((p) => (
-                <li key={p} className="flex gap-3 rounded-lg border border-border bg-surface p-4 text-sm">
-                  <ShieldCheck className="mt-0.5 size-4 shrink-0 text-accent" aria-hidden />
-                  {p}
-                </li>
-              ))}
-            </ul>
           </div>
         </section>
 
@@ -251,7 +244,7 @@ export default async function LandingPage() {
         <div className="mx-auto flex max-w-6xl flex-col gap-4 px-4 py-8 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between sm:px-6">
           <Brand />
           <p className="max-w-xl">{L.footerNote}</p>
-          <p dir="ltr">© {new Date().getFullYear()} CareerFit AI</p>
+          <p>© {new Date().getFullYear()} صانع السير</p>
         </div>
       </footer>
     </>

@@ -96,8 +96,8 @@ describe("Localisation (scenario 21)", () => {
   it("negotiates locale from Accept-Language", () => {
     expect(negotiateLocale("ar-SA,ar;q=0.9,en;q=0.8")).toBe("ar");
     expect(negotiateLocale("fr-FR,en;q=0.5")).toBe("en");
-    expect(negotiateLocale("fr-FR")).toBe("en");
-    expect(negotiateLocale(null)).toBe("en");
+    expect(negotiateLocale("fr-FR")).toBe("ar");
+    expect(negotiateLocale(null)).toBe("ar");
   });
 
   it("interpolates variables", () => {

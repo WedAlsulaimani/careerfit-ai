@@ -8,7 +8,7 @@ import { ToastProvider } from "@/components/ui/toast";
 export async function generateMetadata(): Promise<Metadata> {
   const { t } = await getI18n();
   return {
-    title: { default: t.meta.title, template: `%s · CareerFit AI` },
+    title: { default: t.meta.title, template: `%s · صانع السير` },
     description: t.meta.description,
     robots: { index: true, follow: true },
   };
